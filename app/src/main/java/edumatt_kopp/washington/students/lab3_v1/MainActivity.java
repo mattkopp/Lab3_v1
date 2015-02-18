@@ -19,7 +19,8 @@ import com.google.android.gms.location.LocationServices;
 
 
 
-public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends ActionBarActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     protected GoogleApiClient mGoogleApiClient;
 
@@ -27,10 +28,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     protected TextView mLongitudeText;
     protected Location mLastLocation;
 
-    protected static final String TAG = "Finding Location...";
-
     private ShareActionProvider mShareActionProvider;
     protected String mShare;
+
+    protected static final String TAG = "Finding Location...";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         buildGoogleApiClient();
     }
 
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -52,8 +61,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     protected void onStop() {
         super.onStop();
-        if (mGoogleApiClient.isConnected()) ;
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override
@@ -62,8 +72,13 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         if (mLastLocation != null) {
             mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
             mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+
+            mShare = "I'm at " + String.valueOf(mLastLocation.getLatitude())
+                    + " degrees latitude and " + String.valueOf(mLastLocation.getLongitude())
+                    + " degrees longitude.";
         } else {
             Toast.makeText(this, "No location detected!", Toast.LENGTH_LONG).show();
+            mShare = "No location!";
         }
     }
 
@@ -81,23 +96,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
 
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        //return true;
         mShareActionProvider = (ShareActionProvider) menu.findItem(R.id.share).getActionProvider();
-        mShareActionProvider.setShareIntent(getDefaultShareInent());
+        mShareActionProvider.setShareIntent(getDefaultShareIntent());
+        return true;
     }
 
     private Intent getDefaultShareIntent(){
@@ -105,9 +111,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, mShare);
         return intent;
-        mShare = "I'm at " + String.valueOf(mLastLocation.getLatitude())
-                + " degrees latitude and " + String.valueOf(mLastLocation.getLongitude())
-                + " degrees longitude.";
     }
 
 
