@@ -1,14 +1,13 @@
 package edumatt_kopp.washington.students.lab3_v1;
 
+
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,14 +18,14 @@ import com.google.android.gms.location.LocationServices;
 
 
 
-public class MainActivity extends ActionBarActivity implements
+public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     protected GoogleApiClient mGoogleApiClient;
 
+    protected Location mLastLocation;
     protected TextView mLatitudeText;
     protected TextView mLongitudeText;
-    protected Location mLastLocation;
 
     private ShareActionProvider mShareActionProvider;
     protected String mShare;
