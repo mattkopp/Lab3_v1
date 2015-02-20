@@ -21,7 +21,6 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:text="@string/latitude_label"
         android:layout_marginTop="63dp"
-        android:layout_below="@+id/share"
         android:layout_alignLeft="@+id/longitude_label"
         android:layout_alignStart="@+id/longitude_label" />
     <TextView
@@ -39,10 +38,7 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:text="@string/longitude_label"
         android:layout_marginTop="39dp"
-
         android:layout_below="@+id/latitude_label"
-        android:layout_toRightOf="@+id/share"
-        android:layout_toEndOf="@+id/share"
         android:layout_marginLeft="37dp"
         android:layout_marginStart="37dp" />
     <TextView
@@ -54,11 +50,5 @@ limitations under the License.
         android:layout_toRightOf="@+id/longitude_label"
         android:textIsSelectable="true"
         />
-    <item
-        android:id="@+id/share"
-        android:title="@string/share"
-        android:actionProviderClass="android.widget.ShareActionProvider"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
